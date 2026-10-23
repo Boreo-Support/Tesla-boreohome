@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tesla sign-in · Boreo Home</title>
+<style>
+body{font:16px/1.5 -apple-system,system-ui,sans-serif;max-width:36rem;margin:3rem auto;padding:0 1rem;color:#1d2328}
+code{display:block;word-break:break-all;background:#f1f2ee;border:1px solid #d9dcd8;border-radius:8px;padding:.8rem;font-size:.95rem}
+button{margin-top:.8rem;font:inherit;padding:.5rem 1rem;border-radius:8px;border:1px solid #44505a;background:#fff;cursor:pointer}
+.err{color:#b3261e}
+</style></head><body>
+<h1>Tesla sign-in</h1>
+<div id="out"></div>
+<script>
+const p = new URLSearchParams(location.search), out = document.getElementById('out');
+const code = p.get('code'), err = p.get('error');
+if (code) {
+  out.innerHTML = '<p>Signed in. Copy this code into Home Energy (Settings → Tesla) on the Mac:</p><code id="c"></code><button id="b">Copy code</button><p><small>It works once and expires in a few minutes. Nothing is stored on this page.</small></p>';
+  document.getElementById('c').textContent = code;
+  document.getElementById('b').onclick = () => navigator.clipboard.writeText(code).then(() => document.getElementById('b').textContent = 'Copied', () => {});
+} else if (err) {
+  out.innerHTML = '<p class="err"></p>'; out.firstChild.textContent = 'Tesla sign-in failed: ' + err + (p.get('error_description') ? ' — ' + p.get('error_description') : '');
+} else {
+  out.textContent = 'This page receives the one-time code after signing in to Tesla from Home Energy.';
+}
+</script></body></html>
